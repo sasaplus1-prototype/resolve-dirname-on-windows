@@ -1,4 +1,4 @@
-name: E2E test
+name: test
 
 on:
   - push
@@ -31,6 +31,21 @@ jobs:
           console.log(__filename);
 
           const __dirname = path.dirname(__filename);
+          console.log(__dirname);
+
+          const srcDir = path.join(__dirname, '../src');
+          console.log(srcDir);
+          EOB
+          node index.mjs
+      - run: |
+          cat <<'EOB' > index.mjs
+          import * as path from 'node:path';
+          import * as url from 'node:url';
+
+          const __filename = url.fileURLToPath(import.meta.url);
+          console.log(__filename);
+
+          const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
           console.log(__dirname);
 
           const srcDir = path.join(__dirname, '../src');
