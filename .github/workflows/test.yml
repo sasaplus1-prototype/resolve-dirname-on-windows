@@ -27,16 +27,22 @@ jobs:
           import * as path from 'node:path';
           import * as url from 'node:url';
 
+          const __dirname = url.fileURLToPath(new URL(import.meta.url).pathname);
+          console.log(__dirname);
+
+          const srcDir = path.join(__dirname, '../src');
+          console.log(srcDir);
+          EOB
+          node index.mjs
+      - run: |
+          cat <<'EOB' > index.mjs
+          import * as path from 'node:path';
+          import * as url from 'node:url';
+
           const __dirname = path.dirname(new URL(import.meta.url).pathname);
           console.log(__dirname);
 
           const srcDir = path.join(__dirname, '../src');
           console.log(srcDir);
-
-          const dirname = url.fileURLToPath(new URL(import.meta.url).pathname);
-          console.log(dirname);
-
-          const srcDir2 = path.join(dirname, '../src');
-          console.log(srcDir2);
           EOB
           node index.mjs
