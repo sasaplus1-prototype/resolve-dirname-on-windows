@@ -1,0 +1,42 @@
+name: E2E test
+
+on:
+  - push
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 18
+  TZ: Asia/Tokyo
+
+jobs:
+  test:
+    runs-on: windows-2022
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: |
+          cat <<'EOB' > index.mjs
+          import * as path from 'node:path';
+          import * as url from 'node:url';
+
+          const __dirname = path.dirname(new URL(import.meta.url).pathname);
+          console.log(__dirname);
+
+          const srcDir = path.join(__dirname, '../src');
+          console.log(srcDir);
+
+          const dirname = url.fileURLToPath(new URL(import.meta.url).pathname);
+          console.log(dirname);
+
+          const srcDir2 = path.join(dirname, '../src');
+          console.log(srcDir2);
+          EOB
+          node index.mjs
